@@ -15,7 +15,6 @@ object Entities {
   case class HourlyClassification(hourlyRate: BigDecimal) extends Classification
 
   case class EmployeeStatus(classification: Classification, schedule: Schedule, method: Method = HoldMethod)
-
   case class Employee(employeeId: Long, name: String, status: EmployeeStatus)
 
 }

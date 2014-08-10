@@ -5,7 +5,7 @@ import anova.payroll.usecases.Entities._
 
 import org.scalatest.{FlatSpec, Matchers}
 
-class AddEmployeeSpec extends FlatSpec with Matchers with PayrollModule with MemoryPayrollGatewayModule {
+class AddEmployeeSpec extends BaseEmployeeSpec {
   import AddSEmployee._
 
   it should "add salaried employee" in {
