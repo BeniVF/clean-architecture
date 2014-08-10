@@ -19,7 +19,9 @@ object PayrollBuild extends Build {
           version := Version,
           scalaVersion := ScalaVersion,
           javacOptions ++= Seq("-source", "1.7"),
-          libraryDependencies += "iorg.scalatest" %% "scalatest" % ScalaTestVersion % "test"
+          libraryDependencies ++= Seq(
+            "org.scalatest" %% "scalatest" % ScalaTestVersion % "test"
+          )
         )
   )
 }
