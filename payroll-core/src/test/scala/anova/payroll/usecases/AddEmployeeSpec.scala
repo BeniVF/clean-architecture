@@ -27,7 +27,7 @@ class AddEmployeeSpec extends FlatSpec with Matchers with PayrollModule with Mem
     val employee = employeeGateway.getEmployee(employeeId).get
     employee.name shouldBe "Smith"
     employee.classification match {
-      case CommissionedClassification(salary, commissionRate, BiweeklySchedule) =>
+      case CommissionedClassification(salary, commissionRate, BiweeklySchedule, HoldMethod) =>
         salary shouldBe 5000.00
         commissionRate shouldBe 2.5
       case _ => fail("The employee is not a commissioned employee")
