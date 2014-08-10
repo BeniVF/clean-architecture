@@ -1,20 +1,31 @@
 package anova.payroll.usecases
 
 object Entities {
-  sealed trait Schedule
-  case object MonthlySchedule extends Schedule
-  case object BiweeklySchedule extends Schedule
-  case object WeeklySchedule extends Schedule
+  sealed trait PaymentSchedule
+  case object MonthlySchedule extends PaymentSchedule
+  case object BiweeklySchedule extends PaymentSchedule
+  case object WeeklySchedule extends PaymentSchedule
 
-  sealed trait Method
-  case object HoldMethod extends Method
+  sealed trait PaymentMethod
+  case object HoldMethod extends PaymentMethod
 
-  sealed trait Classification
-  case class SalariedClassification(salary: BigDecimal) extends Classification
-  case class CommissionedClassification(salary: BigDecimal, commissionRate: BigDecimal) extends Classification
-  case class HourlyClassification(hourlyRate: BigDecimal) extends Classification
+  sealed trait PaymentClassification
+  case class SalariedClassification(salary: BigDecimal) extends PaymentClassification
+  case class CommissionedClassification(salary: BigDecimal, commissionRate: BigDecimal) extends PaymentClassification
+  case class HourlyClassification(hourlyRate: BigDecimal) extends PaymentClassification
 
-  case class EmployeeStatus(classification: Classification, schedule: Schedule, method: Method = HoldMethod)
-  case class Employee(employeeId: Long, name: String, status: EmployeeStatus)
+  case class EmployeePayment(classification: PaymentClassification, schedule: PaymentSchedule, method: PaymentMethod = HoldMethod)
+  case class Employee(employeeId: Long, name: String, employeePayment: EmployeePayment)
+
+  object EmployeeBuilder {
+    def apply(employeeId: Long, name: String, employeePayment: EmployeePayment = EmployeePaymentBuilder()) =
+      Employee(employeeId, name, employeePayment)
+  }
+
+  object EmployeePaymentBuilder {
+    def apply(classification: PaymentClassification = SalariedClassification(1000.00), schedule: PaymentSchedule = MonthlySchedule, method: PaymentMethod = HoldMethod) ={
+      EmployeePayment(classification, schedule, method)
+    }
+  }
 
 }
