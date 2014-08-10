@@ -1,11 +1,12 @@
 package anova.payroll.usecases
 
-import anova.payroll.usecases.Entities.{CommissionedClassification, SalariedClassification, Classification, Employee}
+import anova.payroll.usecases.Entities._
 
 import AddSEmployee._
 trait AddEmployee {
   protected def employeeGateway: EmployeeGateway
   def classification(request: AddEmployeeRequest): Classification
+  def schedule(request: AddEmployeeRequest): Schedule
 
   def execute(request: AddEmployeeRequest) =
     this.employeeGateway.saveEmployee(request)
@@ -14,18 +15,28 @@ trait AddEmployee {
     Employee(
       request.employeeId,
       request.name,
-      classification(request)
+      EmployeeStatus(
+        classification = classification(request),
+        schedule = schedule(request)
+      )
     )
 }
 
 class AddSEmployee(implicit val employeeGateway: EmployeeGateway) extends AddEmployee {
-  def classification(request: AddEmployeeRequest): Classification = SalariedClassification(request.salary)
+  def classification(request: AddEmployeeRequest): Classification = SalariedClassification(request.salary.get)
+  def schedule(request: AddEmployeeRequest): Schedule = MonthlySchedule
 }
 
 class AddCommissionedEmployee(implicit val employeeGateway: EmployeeGateway) extends AddEmployee {
-  def classification(request: AddEmployeeRequest): Classification = CommissionedClassification(request.salary, request.commissionRate.get)
+  def classification(request: AddEmployeeRequest): Classification = CommissionedClassification(request.salary.get, request.commissionRate.get)
+  def schedule(request: AddEmployeeRequest): Schedule = BiweeklySchedule
+}
+class AddHourlyEmployee(implicit val employeeGateway: EmployeeGateway) extends AddEmployee {
+  def classification(request: AddEmployeeRequest): Classification = HourlyClassification(request.hourlyRate.get)
+  def schedule(request: AddEmployeeRequest): Schedule = WeeklySchedule
 }
 
 object AddSEmployee {
-  case class AddEmployeeRequest(employeeId: Long, name: String, address: String, salary: BigDecimal, commissionRate: Option[BigDecimal]=None)
+  case class AddEmployeeRequest(employeeId: Long, name: String, address: String, salary: Option[BigDecimal] = None,
+                                commissionRate: Option[BigDecimal] = None, hourlyRate: Option[BigDecimal] = None)
 }
