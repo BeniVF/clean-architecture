@@ -12,7 +12,7 @@ object Entities {
   sealed trait Classification
   case class SalariedClassification(salary: BigDecimal) extends Classification
   case class CommissionedClassification(salary: BigDecimal, commissionRate: BigDecimal) extends Classification
-  case class HourlyClassification(rate: BigDecimal) extends Classification
+  case class HourlyClassification(hourlyRate: BigDecimal) extends Classification
 
   case class EmployeeStatus(classification: Classification, schedule: Schedule, method: Method = HoldMethod)
 
