@@ -17,6 +17,10 @@ class AddSalariedEmployeeSpec extends FlatSpec with Matchers with PayrollModule 
     employee.classification match {
       case salaried: SalariedClassification =>
         salaried.salary shouldBe 1000.00
+        salaried.schedule match {
+          case MonthlySchedule =>
+          case _=> fail("The employee does not have the monthly schedule")
+        }
       case _ => fail("The employee does not have the monthly schedule")
     }
   }
