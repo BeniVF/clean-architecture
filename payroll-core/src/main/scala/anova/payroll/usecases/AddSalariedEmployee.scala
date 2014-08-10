@@ -1,9 +1,8 @@
 package anova.payroll.usecases
 
-import Entities.Employee
+import anova.payroll.usecases.Entities.{SalariedClassification, Employee}
 
 class AddSalariedEmployee(implicit employeeGateway: EmployeeGateway) {
-
   import AddSalariedEmployee._
 
   def execute(request: AddSalariedEmployeeRequest) =
@@ -12,13 +11,12 @@ class AddSalariedEmployee(implicit employeeGateway: EmployeeGateway) {
   implicit def toEmployee(request: AddSalariedEmployeeRequest): Employee =
     Employee(
       request.employeeId,
-      request.name
+      request.name,
+      SalariedClassification(request.salary)
     )
 
 }
 
 object AddSalariedEmployee {
-
   case class AddSalariedEmployeeRequest(employeeId: Long, name: String, address: String, salary: BigDecimal)
-
 }
