@@ -9,6 +9,7 @@ trait PayrollModule {
   lazy val addCommissionedEmployee = new AddCommissionedEmployee
   lazy val addHourlyEmployee = new AddHourlyEmployee
   lazy val deleteEmployee = new DeleteEmployee
+  lazy val postTimeCardsToEmployee = new PostTimeCardsToEmployee
 }
 
 trait MemoryPayrollGatewayModule {

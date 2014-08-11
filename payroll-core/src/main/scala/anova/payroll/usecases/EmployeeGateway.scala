@@ -1,16 +1,26 @@
 package anova.payroll.usecases
 
-import Entities.Employee
+import anova.payroll.usecases.Entities.{HourlyClassification, TimeCard, Employee}
 
 import scala.collection.concurrent.TrieMap
+import java.util.Date
 
 trait EmployeeGateway {
   def getEmployee(employeeId: Long): Option[Employee]
+
   def saveEmployee(employee: Employee)
+
   def deleteEmployee(employeeId: Long)
+
+  def addTimeCard(employeeId: Long, timeCard: TimeCard)
+
+  def getTimeCard(employeeId: Long, date: Date): Option[TimeCard]
+
 }
+
 class MemoryEmployeeGateway(implicit initialEmployees: List[Employee]) extends EmployeeGateway {
-  lazy val employees = toTrieMap(initialEmployees)
+  protected lazy val employees = toTrieMap(initialEmployees)
+  protected lazy val timeCards = TrieMap[Long, Map[Date, TimeCard]]()
 
   private def toTrieMap(templates: List[Employee]): TrieMap[Long, Employee] = {
     val ids = templates.map(_.employeeId)
@@ -19,7 +29,17 @@ class MemoryEmployeeGateway(implicit initialEmployees: List[Employee]) extends E
     result
   }
 
+  def addTimeCard(employeeId: Long, timeCard: TimeCard) = {
+    val employeeTimeCards = timeCards.get(employeeId).getOrElse(Map[Date, TimeCard]())
+    timeCards += (employeeId -> (employeeTimeCards + (timeCard.date -> timeCard)))
+  }
+
+  def getTimeCard(employeeId: Long, date: Date): Option[TimeCard] =
+    timeCards.get(employeeId).map(timeCards => timeCards.get(date)).flatten
+
   def getEmployee(employeeId: Long): Option[Employee] = employees.get(employeeId)
+
   def saveEmployee(employee: Employee) = employees += (employee.employeeId -> employee)
+
   def deleteEmployee(employeeId: Long) = employees -= employeeId
 }
