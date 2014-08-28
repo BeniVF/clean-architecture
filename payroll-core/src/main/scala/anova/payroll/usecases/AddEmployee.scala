@@ -3,6 +3,8 @@ package anova.payroll.usecases
 import anova.payroll.usecases.Entities._
 
 import AddSEmployee._
+import anova.payroll.usecases.EntitiesBuilder.{EmployeePaymentBuilder, EmployeeBuilder}
+
 trait AddEmployee {
   protected def employeeGateway: EmployeeGateway
   def classification(request: AddEmployeeRequest): PaymentClassification

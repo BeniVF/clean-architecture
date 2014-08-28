@@ -22,6 +22,11 @@ object Entities {
   case class EmployeePayment(classification: PaymentClassification, schedule: PaymentSchedule, method: PaymentMethod = HoldMethod)
   case class Employee(employeeId: Long, name: String, employeePayment: EmployeePayment)
 
+
+}
+
+object EntitiesBuilder {
+  import Entities._
   object EmployeeBuilder {
     def apply(employeeId: Long, name: String, employeePayment: EmployeePayment = EmployeePaymentBuilder()) =
       Employee(employeeId, name, employeePayment)
@@ -31,6 +36,10 @@ object Entities {
     def apply(classification: PaymentClassification = SalariedClassification(1000.00), schedule: PaymentSchedule = MonthlySchedule, method: PaymentMethod = HoldMethod) ={
       EmployeePayment(classification, schedule, method)
     }
+  }
+
+  object TimeCardBuilder {
+    def apply(date: DateTime, hours: BigDecimal) = TimeCard(date, hours)
   }
 
 }

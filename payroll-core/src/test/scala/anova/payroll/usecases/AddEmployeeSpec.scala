@@ -1,6 +1,7 @@
 package anova.payroll.usecases
 
 import anova.payroll.usecases.Entities._
+import anova.payroll.usecases.EntitiesBuilder.{EmployeePaymentBuilder, EmployeeBuilder}
 
 class AddEmployeeSpec extends BaseEmployeeSpec {
 

@@ -1,10 +1,9 @@
 package anova.payroll.usecases
 
-import anova.payroll.usecases.Entities._
+import anova.payroll.usecases.EntitiesBuilder._
 import com.github.nscala_time.time.StringImplicits
 import anova.payroll.usecases.PostTimeCardsToEmployee.PostTimeCardsToEmployeeRequest
-import anova.payroll.usecases.Entities.HourlyClassification
-
+import anova.payroll.usecases.Entities.{WeeklySchedule, HourlyClassification}
 
 class PostTimeCardsToEmployeeSpec extends BaseEmployeeSpec with StringImplicits {
 
@@ -20,7 +19,7 @@ class PostTimeCardsToEmployeeSpec extends BaseEmployeeSpec with StringImplicits 
 
     val timeCard = employeeGateway.getTimeCard(employeeId, date)
 
-    timeCard shouldBe Option(TimeCard(date, hours))
+    timeCard shouldBe Option(TimeCardBuilder(date, hours))
   }
 
 }
