@@ -1,8 +1,8 @@
 package anova.payroll.usecases
 
-import java.util.Date
 import anova.payroll.usecases.PostTimeCardsToEmployee.PostTimeCardsToEmployeeRequest
 import anova.payroll.usecases.Entities.{TimeCard, HourlyClassification}
+import org.joda.time.DateTime
 
 
 class PostTimeCardsToEmployee(implicit val employeeGateway: EmployeeGateway) {
@@ -23,5 +23,5 @@ class PostTimeCardsToEmployee(implicit val employeeGateway: EmployeeGateway) {
 }
 
 object PostTimeCardsToEmployee {
-  case class PostTimeCardsToEmployeeRequest(dateTime: Date, hours: BigDecimal, employeeId: Long)
+  case class PostTimeCardsToEmployeeRequest(dateTime: DateTime, hours: BigDecimal, employeeId: Long)
 }

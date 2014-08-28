@@ -1,6 +1,7 @@
 package anova.payroll.usecases
 
-import java.util.Date
+import org.joda.time.DateTime
+
 
 object Entities {
   sealed trait PaymentSchedule
@@ -16,7 +17,7 @@ object Entities {
   case class CommissionedClassification(salary: BigDecimal, commissionRate: BigDecimal) extends PaymentClassification
   case class HourlyClassification(hourlyRate: BigDecimal) extends PaymentClassification
 
-  case class TimeCard(date: Date, hours: BigDecimal)
+  case class TimeCard(date: DateTime, hours: BigDecimal)
 
   case class EmployeePayment(classification: PaymentClassification, schedule: PaymentSchedule, method: PaymentMethod = HoldMethod)
   case class Employee(employeeId: Long, name: String, employeePayment: EmployeePayment)
