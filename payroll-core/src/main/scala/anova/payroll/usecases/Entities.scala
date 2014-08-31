@@ -19,6 +19,7 @@ object Entities {
 
   case class TimeCard(date: DateTime, hours: BigDecimal)
   case class SalesReceipt(date: DateTime, amount: BigDecimal)
+  case class Paycheck(payPeriodEndDate: DateTime, grossPay: BigDecimal, fields: Map[String, String], deductions: BigDecimal, netPay: BigDecimal)
 
   case class EmployeePayment(classification: PaymentClassification, schedule: PaymentSchedule, method: PaymentMethod = HoldMethod)
   case class Employee(employeeId: Long, name: String, employeePayment: EmployeePayment)

@@ -1,12 +1,14 @@
 package anova.payroll.gateway
 
-import anova.payroll.usecases.Entities.{Employee, SalesReceipt, TimeCard}
+import anova.payroll.usecases.Entities.{Paycheck, Employee, SalesReceipt, TimeCard}
 import org.joda.time.DateTime
 
 import scala.collection.concurrent.TrieMap
 
 trait EmployeeGateway {
   def getEmployee(employeeId: Long): Option[Employee]
+
+  def getEmployees : List[Employee]
 
   def saveEmployee(employee: Employee)
 
@@ -20,12 +22,17 @@ trait EmployeeGateway {
 
   def getSalesReceipt(employeeId: Long, date: DateTime): Option[SalesReceipt]
 
+  def addPaycheck(employeeId: Long, paycheck: Paycheck)
+
+  def getPaycheck(employeeId: Long, date: DateTime): Option[Paycheck]
+
 }
 
 class MemoryEmployeeGateway(implicit initialEmployees: List[Employee]) extends EmployeeGateway {
   protected lazy val employees = toTrieMap(initialEmployees)
   protected lazy val timeCards = TrieMap[Long, Map[DateTime, TimeCard]]()
   protected lazy val salesReceipts = TrieMap[Long, Map[DateTime, SalesReceipt]]()
+  protected lazy val paychecks = TrieMap[Long, Map[DateTime, Paycheck]]()
 
   private def toTrieMap(templates: List[Employee]): TrieMap[Long, Employee] = {
     val ids = templates.map(_.employeeId)
@@ -34,14 +41,21 @@ class MemoryEmployeeGateway(implicit initialEmployees: List[Employee]) extends E
     result
   }
 
+  def getEmployees : List[Employee] = employees.values.toList
+
   def addTimeCard(employeeId: Long, timeCard: TimeCard) {
-    val employeeTimeCards = timeCards.get(employeeId).getOrElse(Map[DateTime, TimeCard]())
+    val employeeTimeCards = timeCards.getOrElse(employeeId, Map[DateTime, TimeCard]())
     timeCards += (employeeId -> (employeeTimeCards + (timeCard.date -> timeCard)))
   }
 
   def addSalesReceipt(employeeId: Long, salesReceipt: SalesReceipt) = {
-    val employeeTimeCards = salesReceipts.get(employeeId).getOrElse(Map[DateTime, SalesReceipt]())
-    salesReceipts += (employeeId -> (employeeTimeCards + (salesReceipt.date -> salesReceipt)))
+    val employeeSalesReceipts = salesReceipts.getOrElse(employeeId, Map[DateTime, SalesReceipt]())
+    salesReceipts += (employeeId -> (employeeSalesReceipts + (salesReceipt.date -> salesReceipt)))
+  }
+
+  def addPaycheck(employeeId: Long, paycheck: Paycheck) = {
+    val employeePaychecks = paychecks.getOrElse(employeeId, Map[DateTime, Paycheck]())
+    paychecks += (employeeId -> (employeePaychecks + (paycheck.payPeriodEndDate -> paycheck)))
   }
 
   def getTimeCard(employeeId: Long, date: DateTime): Option[TimeCard] =
@@ -50,9 +64,13 @@ class MemoryEmployeeGateway(implicit initialEmployees: List[Employee]) extends E
   def getSalesReceipt(employeeId: Long, date: DateTime): Option[SalesReceipt] =
     salesReceipts.get(employeeId).map(salesReceipts => salesReceipts.get(date)).flatten
 
+  def getPaycheck(employeeId: Long, date: DateTime) =  paychecks.get(employeeId).map(paychecks => paychecks.get(date)).flatten
+
   def getEmployee(employeeId: Long): Option[Employee] = employees.get(employeeId)
 
   def saveEmployee(employee: Employee) = employees += (employee.employeeId -> employee)
 
   def deleteEmployee(employeeId: Long) = employees -= employeeId
+
+
 }
