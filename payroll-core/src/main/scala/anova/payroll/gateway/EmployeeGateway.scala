@@ -1,9 +1,9 @@
-package anova.payroll.usecases
+package anova.payroll.gateway
 
-import anova.payroll.usecases.Entities.{TimeCard, Employee}
+import anova.payroll.usecases.Entities.{Employee, SalesReceipt, TimeCard}
+import org.joda.time.DateTime
 
 import scala.collection.concurrent.TrieMap
-import org.joda.time.DateTime
 
 trait EmployeeGateway {
   def getEmployee(employeeId: Long): Option[Employee]
@@ -16,11 +16,16 @@ trait EmployeeGateway {
 
   def getTimeCard(employeeId: Long, date: DateTime): Option[TimeCard]
 
+  def addSalesReceipt(employeeId: Long, salesReceipt: SalesReceipt)
+
+  def getSalesReceipt(employeeId: Long, date: DateTime): Option[SalesReceipt]
+
 }
 
 class MemoryEmployeeGateway(implicit initialEmployees: List[Employee]) extends EmployeeGateway {
   protected lazy val employees = toTrieMap(initialEmployees)
   protected lazy val timeCards = TrieMap[Long, Map[DateTime, TimeCard]]()
+  protected lazy val salesReceipts = TrieMap[Long, Map[DateTime, SalesReceipt]]()
 
   private def toTrieMap(templates: List[Employee]): TrieMap[Long, Employee] = {
     val ids = templates.map(_.employeeId)
@@ -29,13 +34,21 @@ class MemoryEmployeeGateway(implicit initialEmployees: List[Employee]) extends E
     result
   }
 
-  def addTimeCard(employeeId: Long, timeCard: TimeCard) = {
+  def addTimeCard(employeeId: Long, timeCard: TimeCard) {
     val employeeTimeCards = timeCards.get(employeeId).getOrElse(Map[DateTime, TimeCard]())
     timeCards += (employeeId -> (employeeTimeCards + (timeCard.date -> timeCard)))
   }
 
+  def addSalesReceipt(employeeId: Long, salesReceipt: SalesReceipt) = {
+    val employeeTimeCards = salesReceipts.get(employeeId).getOrElse(Map[DateTime, SalesReceipt]())
+    salesReceipts += (employeeId -> (employeeTimeCards + (salesReceipt.date -> salesReceipt)))
+  }
+
   def getTimeCard(employeeId: Long, date: DateTime): Option[TimeCard] =
     timeCards.get(employeeId).map(timeCards => timeCards.get(date)).flatten
+
+  def getSalesReceipt(employeeId: Long, date: DateTime): Option[SalesReceipt] =
+    salesReceipts.get(employeeId).map(salesReceipts => salesReceipts.get(date)).flatten
 
   def getEmployee(employeeId: Long): Option[Employee] = employees.get(employeeId)
 

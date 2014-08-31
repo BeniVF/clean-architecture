@@ -5,7 +5,7 @@ import anova.payroll.usecases.EntitiesBuilder.{EmployeePaymentBuilder, EmployeeB
 
 class AddEmployeeSpec extends BaseEmployeeSpec {
 
-  import anova.payroll.usecases.AddSEmployee._
+  import anova.payroll.usecases.AddSalariedEmployee._
 
   it should "add a salaried employee" in {
     val employeeId = 1

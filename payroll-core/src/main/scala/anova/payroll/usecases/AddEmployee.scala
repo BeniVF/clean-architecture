@@ -1,8 +1,9 @@
 package anova.payroll.usecases
 
+import anova.payroll.gateway.EmployeeGateway
 import anova.payroll.usecases.Entities._
 
-import AddSEmployee._
+import AddSalariedEmployee._
 import anova.payroll.usecases.EntitiesBuilder.{EmployeePaymentBuilder, EmployeeBuilder}
 
 trait AddEmployee {
@@ -24,7 +25,7 @@ trait AddEmployee {
     )
 }
 
-class AddSEmployee(implicit val employeeGateway: EmployeeGateway) extends AddEmployee {
+class AddSalariedEmployee(implicit val employeeGateway: EmployeeGateway) extends AddEmployee {
   def classification(request: AddEmployeeRequest): PaymentClassification = SalariedClassification(request.salary.get)
   def schedule(request: AddEmployeeRequest): PaymentSchedule = MonthlySchedule
 }
@@ -38,7 +39,7 @@ class AddHourlyEmployee(implicit val employeeGateway: EmployeeGateway) extends A
   def schedule(request: AddEmployeeRequest): PaymentSchedule = WeeklySchedule
 }
 
-object AddSEmployee {
+object AddSalariedEmployee {
   case class AddEmployeeRequest(employeeId: Long, name: String, address: String, salary: Option[BigDecimal] = None,
                                 commissionRate: Option[BigDecimal] = None, hourlyRate: Option[BigDecimal] = None)
 }

@@ -18,11 +18,10 @@ object Entities {
   case class HourlyClassification(hourlyRate: BigDecimal) extends PaymentClassification
 
   case class TimeCard(date: DateTime, hours: BigDecimal)
+  case class SalesReceipt(date: DateTime, amount: BigDecimal)
 
   case class EmployeePayment(classification: PaymentClassification, schedule: PaymentSchedule, method: PaymentMethod = HoldMethod)
   case class Employee(employeeId: Long, name: String, employeePayment: EmployeePayment)
-
-
 }
 
 object EntitiesBuilder {
@@ -40,6 +39,10 @@ object EntitiesBuilder {
 
   object TimeCardBuilder {
     def apply(date: DateTime, hours: BigDecimal) = TimeCard(date, hours)
+  }
+
+  object SalesReceiptBuilder {
+    def apply(date: DateTime, amount: BigDecimal) = SalesReceipt(date, amount)
   }
 
 }
