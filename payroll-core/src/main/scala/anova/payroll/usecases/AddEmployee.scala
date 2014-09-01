@@ -1,7 +1,7 @@
 package anova.payroll.usecases
 
 import anova.payroll.gateway.EmployeeGateway
-import anova.payroll.usecases.Entities._
+import anova.payroll.usecases.Data._
 
 import AddSalariedEmployee._
 import anova.payroll.usecases.EntitiesBuilder.{EmployeePaymentBuilder, EmployeeBuilder}

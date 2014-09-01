@@ -1,6 +1,6 @@
 package anova.payroll.usecases
 
-import anova.payroll.usecases.Entities.{BiweeklySchedule, CommissionedClassification}
+import anova.payroll.usecases.Data._
 import anova.payroll.usecases.EntitiesBuilder._
 import anova.payroll.usecases.PostSalesReceipt.PostSalesReceiptRequest
 import com.github.nscala_time.time.StringImplicits

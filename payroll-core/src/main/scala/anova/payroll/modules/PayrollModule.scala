@@ -1,7 +1,7 @@
 package anova.payroll.modules
 
 import anova.payroll.gateway.{MemoryEmployeeGateway, EmployeeGateway}
-import anova.payroll.usecases.Entities.Employee
+import anova.payroll.usecases.Data._
 import anova.payroll.usecases._
 
 trait PayrollModule {

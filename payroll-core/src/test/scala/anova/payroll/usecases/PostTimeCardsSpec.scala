@@ -3,7 +3,7 @@ package anova.payroll.usecases
 import anova.payroll.usecases.EntitiesBuilder._
 import com.github.nscala_time.time.StringImplicits
 import anova.payroll.usecases.PostTimeCards.PostTimeCardsToEmployeeRequest
-import anova.payroll.usecases.Entities.{WeeklySchedule, HourlyClassification}
+import anova.payroll.usecases.Data._
 
 class PostTimeCardsSpec extends BaseEmployeeSpec with StringImplicits {
 

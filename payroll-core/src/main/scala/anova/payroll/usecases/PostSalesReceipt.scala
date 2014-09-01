@@ -1,7 +1,7 @@
 package anova.payroll.usecases
 
 import anova.payroll.gateway.EmployeeGateway
-import anova.payroll.usecases.Entities.{CommissionedClassification, SalesReceipt}
+import anova.payroll.usecases.Data._
 import org.joda.time.DateTime
 
 class PostSalesReceipt(implicit val employeeGateway: EmployeeGateway) {

@@ -1,6 +1,6 @@
 package anova.payroll.gateway
 
-import anova.payroll.usecases.Entities.{Paycheck, Employee, SalesReceipt, TimeCard}
+import anova.payroll.usecases.Data._
 import org.joda.time.DateTime
 
 import scala.collection.concurrent.TrieMap

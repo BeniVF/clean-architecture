@@ -2,7 +2,7 @@ package anova.payroll.usecases
 
 import anova.payroll.gateway.EmployeeGateway
 import anova.payroll.usecases.PostTimeCards.PostTimeCardsToEmployeeRequest
-import anova.payroll.usecases.Entities.{TimeCard, HourlyClassification}
+import anova.payroll.usecases.Data._
 import org.joda.time.DateTime
 
 
