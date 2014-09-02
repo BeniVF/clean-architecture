@@ -1,6 +1,6 @@
 package anova.payroll.usecases
 
-import anova.payroll.usecases.EntitiesBuilder._
+import anova.payroll.usecases.DataBuilder._
 import com.github.nscala_time.time.StringImplicits
 import anova.payroll.usecases.PostTimeCards.PostTimeCardsToEmployeeRequest
 import anova.payroll.usecases.Data._
@@ -8,7 +8,7 @@ import anova.payroll.usecases.Data._
 class PostTimeCardsSpec extends BaseEmployeeSpec with StringImplicits {
 
   override lazy val initialEmployees = List(EmployeeBuilder(1, "James"),
-    EmployeeBuilder(2, "Arthur", EmployeePaymentBuilder(HourlyClassification(12.33), WeeklySchedule)))
+    EmployeeBuilder(2, "Arthur", HourlyClassificationData(12.33), WeeklyScheduleData))
 
 
   it should "posts time cards to employees" in {

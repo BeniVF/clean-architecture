@@ -2,85 +2,87 @@ package anova.payroll.usecases
 
 import org.joda.time.DateTime
 
-
 object Entities {
 
   import Data._
 
-  case class EmployeeEntity(data: Employee) {
+  trait Employee {
+    def id: Long
+    def isPayDay: Boolean
+    def pay(date: DateTime): PaycheckData
+  }
+
+  case class EmployeeImplementation(data: EmployeeData) extends Employee {
+
+    def id: Long = data.employeeId
+
     def isPayDay: Boolean = true
 
-    def salary: BigDecimal = data.employeePayment.classification match {
-      case SalariedClassification(salary) => salary
+    def salary: BigDecimal = data.classification match {
+      case SalariedClassificationData(salary) => salary
+      case _ => 0
     }
 
-    def pay(date: DateTime): Paycheck =
-      Paycheck(date, salary, Map("Disposition" -> "Hold"), 0.0, salary)
+    def pay(date: DateTime): PaycheckData =
+      PaycheckData(date, salary, Map("Disposition" -> "Hold"), 0.0, salary)
   }
-
-  trait PaymentClassificationEntity {
-    def calculateSalary: BigDecimal
-  }
-
-  implicit def toEmployee(data: Employee) = EmployeeEntity(data)
-
 }
+
+object EntityFactory {
+  import anova.payroll.usecases.Entities._
+  import Data._
+  implicit def toEmployee(data: EmployeeData) : Employee = EmployeeImplementation(data)
+}
+
+
 
 object Data {
 
-  sealed trait PaymentSchedule
+  sealed trait PaymentScheduleData
 
-  case object MonthlySchedule extends PaymentSchedule
+  case object MonthlyScheduleData extends PaymentScheduleData
 
-  case object BiweeklySchedule extends PaymentSchedule
+  case object BiweeklyScheduleData extends PaymentScheduleData
 
-  case object WeeklySchedule extends PaymentSchedule
+  case object WeeklyScheduleData extends PaymentScheduleData
 
-  sealed trait PaymentMethod
+  sealed trait PaymentMethodData
 
-  case object HoldMethod extends PaymentMethod
+  case object HoldMethodData extends PaymentMethodData
 
-  sealed trait PaymentClassification
+  sealed trait PaymentClassificationData
 
-  case class SalariedClassification(salary: BigDecimal) extends PaymentClassification
+  case class SalariedClassificationData(salary: BigDecimal) extends PaymentClassificationData
 
-  case class CommissionedClassification(salary: BigDecimal, commissionRate: BigDecimal) extends PaymentClassification
+  case class CommissionedClassificationData(salary: BigDecimal, commissionRate: BigDecimal) extends PaymentClassificationData
 
-  case class HourlyClassification(hourlyRate: BigDecimal) extends PaymentClassification
+  case class HourlyClassificationData(hourlyRate: BigDecimal) extends PaymentClassificationData
 
-  case class TimeCard(date: DateTime, hours: BigDecimal)
+  case class EmployeeData(employeeId: Long, name: String, classification: PaymentClassificationData, schedule: PaymentScheduleData, method: PaymentMethodData = HoldMethodData)
 
-  case class SalesReceipt(date: DateTime, amount: BigDecimal)
+  case class TimeCardData(date: DateTime, hours: BigDecimal)
 
-  case class Paycheck(payPeriodEndDate: DateTime, grossPay: BigDecimal, fields: Map[String, String], deductions: BigDecimal, netPay: BigDecimal)
+  case class SalesReceiptData(date: DateTime, amount: BigDecimal)
 
-  case class EmployeePayment(classification: PaymentClassification, schedule: PaymentSchedule, method: PaymentMethod = HoldMethod)
-
-  case class Employee(employeeId: Long, name: String, employeePayment: EmployeePayment)
+  case class PaycheckData(payPeriodEndDate: DateTime, grossPay: BigDecimal, fields: Map[String, String], deductions: BigDecimal, netPay: BigDecimal)
 
 }
 
-object EntitiesBuilder {
+object DataBuilder {
 
   import Data._
 
   object EmployeeBuilder {
-    def apply(employeeId: Long, name: String, employeePayment: EmployeePayment = EmployeePaymentBuilder()) =
-      Employee(employeeId, name, employeePayment)
-  }
-
-  object EmployeePaymentBuilder {
-    def apply(classification: PaymentClassification = SalariedClassification(1000.00), schedule: PaymentSchedule = MonthlySchedule, method: PaymentMethod = HoldMethod) = {
-      EmployeePayment(classification, schedule, method)
-    }
+    def apply(employeeId: Long, name: String, classification: PaymentClassificationData= SalariedClassificationData(1000.00), schedule: PaymentScheduleData = MonthlyScheduleData, method: PaymentMethodData = HoldMethodData) =
+      EmployeeData(employeeId, name, classification, schedule, method)
   }
 
   object TimeCardBuilder {
-    def apply(date: DateTime, hours: BigDecimal) = TimeCard(date, hours)
+    def apply(date: DateTime, hours: BigDecimal) = TimeCardData(date, hours)
   }
 
   object SalesReceiptBuilder {
-    def apply(date: DateTime, amount: BigDecimal) = SalesReceipt(date, amount)
+    def apply(date: DateTime, amount: BigDecimal) = SalesReceiptData(date, amount)
   }
 
 }

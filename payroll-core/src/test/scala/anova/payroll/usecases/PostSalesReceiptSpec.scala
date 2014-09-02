@@ -1,14 +1,14 @@
 package anova.payroll.usecases
 
 import anova.payroll.usecases.Data._
-import anova.payroll.usecases.EntitiesBuilder._
+import anova.payroll.usecases.DataBuilder._
 import anova.payroll.usecases.PostSalesReceipt.PostSalesReceiptRequest
 import com.github.nscala_time.time.StringImplicits
 
 class PostSalesReceiptSpec extends BaseEmployeeSpec with StringImplicits {
 
   override lazy val initialEmployees = List(EmployeeBuilder(1, "James"),
-    EmployeeBuilder(2, "Arthur", EmployeePaymentBuilder(CommissionedClassification(1000.3, 10.0), BiweeklySchedule)))
+    EmployeeBuilder(2, "Arthur", CommissionedClassificationData(1000.3, 10.0), BiweeklyScheduleData))
 
 
   it should "posts sales receipt" in {

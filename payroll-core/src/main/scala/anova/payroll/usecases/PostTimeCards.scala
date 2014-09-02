@@ -12,9 +12,9 @@ class PostTimeCards(implicit val employeeGateway: EmployeeGateway) {
 
     employee.map {
       employee =>
-      employee.employeePayment.classification match {
-        case classification: HourlyClassification =>
-          employeeGateway.addTimeCard(request.employeeId, TimeCard(request.dateTime, request.hours))
+      employee.classification match {
+        case classification: HourlyClassificationData =>
+          employeeGateway.addTimeCard(request.employeeId, TimeCardData(request.dateTime, request.hours))
         case _ => //TODO Not hourly employee??
       }
     }

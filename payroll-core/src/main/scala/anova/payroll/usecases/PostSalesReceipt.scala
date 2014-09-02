@@ -10,9 +10,9 @@ class PostSalesReceipt(implicit val employeeGateway: EmployeeGateway) {
     val employee = employeeGateway.getEmployee(request.employeeId)
     employee.map {
       employee =>
-      employee.employeePayment.classification match {
-        case classification: CommissionedClassification =>
-          employeeGateway.addSalesReceipt(request.employeeId, SalesReceipt(request.date, request.amount))
+      employee.classification match {
+        case classification: CommissionedClassificationData =>
+          employeeGateway.addSalesReceipt(request.employeeId, SalesReceiptData(request.date, request.amount))
         case _ => //TODO Not commissioned employee??
       }
     }

@@ -1,7 +1,7 @@
 package anova.payroll.usecases
 
 import anova.payroll.usecases.Data._
-import anova.payroll.usecases.EntitiesBuilder.{EmployeePaymentBuilder, EmployeeBuilder}
+import anova.payroll.usecases.DataBuilder.EmployeeBuilder
 
 class AddEmployeeSpec extends BaseEmployeeSpec {
 
@@ -16,10 +16,9 @@ class AddEmployeeSpec extends BaseEmployeeSpec {
 
     employee shouldBe EmployeeBuilder(
       employeeId, request.name,
-      EmployeePaymentBuilder(
-        SalariedClassification(request.salary.get),
-        MonthlySchedule,
-        HoldMethod)
+      SalariedClassificationData(request.salary.get),
+      MonthlyScheduleData,
+      HoldMethodData
     )
   }
 
@@ -33,11 +32,10 @@ class AddEmployeeSpec extends BaseEmployeeSpec {
 
     employee shouldBe EmployeeBuilder(
       employeeId, request.name,
-      EmployeePaymentBuilder(
-        CommissionedClassification(request.salary.get, request.commissionRate.get),
-        BiweeklySchedule,
-        HoldMethod
-      )
+      CommissionedClassificationData(request.salary.get, request.commissionRate.get),
+      BiweeklyScheduleData,
+      HoldMethodData
+
     )
   }
 
@@ -50,11 +48,9 @@ class AddEmployeeSpec extends BaseEmployeeSpec {
 
     employee shouldBe EmployeeBuilder(
       employeeId, request.name,
-      EmployeePaymentBuilder(
-        HourlyClassification(request.hourlyRate.get),
-        WeeklySchedule,
-        HoldMethod
-      )
+      HourlyClassificationData(request.hourlyRate.get),
+      WeeklyScheduleData,
+      HoldMethodData
     )
   }
 }

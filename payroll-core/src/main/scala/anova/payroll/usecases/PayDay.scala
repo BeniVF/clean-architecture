@@ -5,14 +5,15 @@ import anova.payroll.usecases.Entities._
 
 
 import org.joda.time.DateTime
+import anova.payroll.usecases.Data.EmployeeData
 
-class PayDay(implicit val employeeGateway: EmployeeGateway) {
+class PayDay(implicit val toEmployee: EmployeeData => Employee, val employeeGateway: EmployeeGateway) {
 
   def execute(date: DateTime) {
     employeeGateway.getEmployees.foreach {
       employee =>
         if (employee.isPayDay)
-          employeeGateway.addPaycheck(employee.employeeId, employee.pay(date))
+          employee.pay(date)
     }
   }
 }

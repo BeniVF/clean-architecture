@@ -1,6 +1,6 @@
 package anova.payroll.usecases
 
-import anova.payroll.usecases.EntitiesBuilder.EmployeeBuilder
+import anova.payroll.usecases.DataBuilder.EmployeeBuilder
 
 
 class DeleteEmployeeSpec extends BaseEmployeeSpec {
