@@ -28,24 +28,6 @@ trait EmployeeGateway {
 
 }
 
-object EntityFactory {
-  import anova.payroll.usecases.Entities._
-  import anova.payroll.usecases.Data._
-  def toEmployeeProxy(data: EmployeeData)(implicit employeeGateway: EmployeeGateway) : Employee = EmployeeProxy(EmployeeImplementation(data))
-
-  case class EmployeeProxy(employee: Employee)(implicit employeeGateway: EmployeeGateway) extends Employee {
-    def id: Long = employee.id
-
-    def isPayDay: Boolean = employee.isPayDay
-
-    def pay(date: DateTime): PaycheckData = {
-      val paycheck = employee.pay(date)
-      employeeGateway.addPaycheck(id, paycheck)
-      paycheck
-    }
-  }
-}
-
 
 class MemoryEmployeeGateway(implicit initialEmployees: List[EmployeeData]) extends EmployeeGateway {
   protected lazy val employees = toTrieMap(initialEmployees)
